@@ -63,7 +63,7 @@ const style = {
     backgroundColor: 'hsla(31, 100%, 56%, 1)',
     borderRadius: '5px',
     border: 'solid hsla(31, 100%, 56%, 1)',
-    fontFamily: '"Indie Flower", cursive',
+    fontFamily: '"Roboto", sans-serif',
     fontSize: '18px',
   },
   result: {
@@ -81,7 +81,7 @@ const style = {
     backgroundColor: 'hsla(31, 100%, 56%, 1)',
     border: 'solid hsla(31, 100%, 56%, 1)',
     borderRadius: '5px',
-    fontFamily: '"Indie Flower", cursive',
+    fontFamily: '"Roboto", sans-serif',
     fontSize: '18px',
   },
 };
