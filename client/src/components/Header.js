@@ -42,7 +42,7 @@ const style = {
     padding: '0px 24px',
   },
   h1: {
-    fontFamily: '"Indie Flower", cursive',
+    fontFamily: '"Roboto", sans-serif'
   },
   a: {
     color: 'black',

@@ -51,7 +51,7 @@ const style = {
     gap: '24px',
     paddingTop: '48px',
     height: '90vh',
-    fontFamily: '"Indie Flower", cursive',
+    fontFamily: '"Roboto", sans-serif',
     fontSize: '18px',
   },
   tabs: {

@@ -53,7 +53,7 @@ const style = {
     border: 'solid hsla(31, 100%, 56%, 1)',
     borderRadius: '10px',
     padding: '16px',
-    fontFamily: '"Indie Flower", cursive',
+    fontFamily: '"Roboto", sans-serif',
     fontSize: '18px',
   },
 };

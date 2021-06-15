@@ -69,7 +69,7 @@ const style = {
     borderRadius: '8px',
   },
   h1: {
-    fontFamily: '"Indie Flower", cursive',
+    fontFamily: '"Roboto", sans-serif',
   },
   loginButton: {
     color: 'white',
