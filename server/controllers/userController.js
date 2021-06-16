@@ -1,7 +1,44 @@
 /* eslint-disable indent */
 const db = require('../models/userModels');
+const bcrypt = require('bcryptjs');
 
 const userController = {};
+
+userController.addUser = async (req, res, next) => {
+  // req.body = { username: 'rabbit', password: 'carrot'}
+  const { email, name, password } = req.body;
+  const searchQuery = "SELECT email FROM localuser where email = $1";
+  const searchParams = [email];
+	console.log('reached here');
+  try {
+    const { rowCount } = await db.query(searchQuery, searchParams);
+    console.log("number of matches in db", rowCount);
+    if (rowCount)
+      return next({ err: "error with username found already in db" });
+  } catch (e) {
+    return next({ err: "error with searching username in db: " + e });
+  }
+
+  const hashedPass = await bcrypt.hash(password, 5);
+  const cookie = email + " hello cookie";
+  // insert into db
+  const insertQuery =
+    "INSERT INTO localuser (email, name, password, cookie) VALUES ($1, $2, $3, $4)";
+  const insertParams = [email, name, hashedPass, cookie];
+  // const createTableQuery = `CREATE TABLE ${username}_history(id SERIAL PRIMARY KEY, date varchar NOT NULL, habit_id int NOT NULL, task_id int NOT NULL, description varchar, requirement int, completion int DEFAULT 0, isWeekly int DEFAULT 0, CONSTRAINT fk_habit FOREIGN KEY (habit_id) REFERENCES habit(id) ON DELETE cascade, CONSTRAINT fk_task FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE cascade )`;
+  try {
+    await db.query(insertQuery, insertParams);
+    // await db.query(createTableQuery);
+  } catch (e) {
+    // fill in error message
+    return next({ err: "error with db query in addUser: " + e });
+  }
+  console.log("successfully signuped");
+  res.locals.email = email;
+  res.cookie("SSID", cookie);
+  return next();
+};
+
 
 userController.loginOrCreateUser = async (req, res, next) => {
 	const { name, auth_token, email } = req.body;
@@ -78,87 +115,88 @@ userController.getFeed = async (req, res, next) => {
 	}
 };
 
-userController.searchUsers = async (req, res, next) => {
-	const {name} = req.body;
-	const sql = `select * from users where name like '%name%'`
-	try{
-		const results = db.query(sql);
-		res.locals.users = results.rows;
-	} catch (err) {
-		console.log(err);
-		return next({
-			log: 'Error in userController.findUsers',
-			message: {
-				err: `userController.findUsers: ERROR:${err}`,
-			},
-	});
-}
+// userController.searchUsers = async (req, res, next) => {
+// 	const {name} = req.body;
+// 	const sql = 'select * from users where name like \'%name%\'';
+// 	try{
+// 		const results = db.query(sql);
+// 		res.locals.users = results.rows;
+// 	} catch (err) {
+// 		console.log(err);
+// 		return next({
+// 			log: 'Error in userController.findUsers',
+// 			message: {
+// 				err: `userController.findUsers: ERROR:${err}`,
+// 			},
+// 		});
+// 	}
+// };
 
 
 //! get username not id
-userController.getFollows = async (req, res, next) => {
-	try {
-		const { auth_token } = req.body;
-		//follower_id = current user's id
-		//querying for all user_ids that have this follower_id
-		// const data = [3];
+// userController.getFollows = async (req, res, next) => {
+// 	try {
+// 		const { auth_token } = req.body;
+// 		//follower_id = current user's id
+// 		//querying for all user_ids that have this follower_id
+// 		// const data = [3];
 
-		const sql = `SELECT DISTINCT user_id FROM followers as a inner join users as b ON a.follower_id = b._id WHERE b.user_auth_token = '${auth_token}'`;
-		const results = await db.query(sql);
-		if (!results && results.row.length === 0)
-			throw new Error('No followers found for user');
-		res.locals.follows = results.rows;
-		return next();
-	} catch (err) {
-		console.log(err);
-		return next({
-			log: 'Error in userController.getUser',
-			message: {
-				err: `userController.getUser: ERROR: ${err}`,
-			},
-		});
-	}
-};
+// 		const sql = `SELECT DISTINCT user_id FROM followers as a inner join users as b ON a.follower_id = b._id WHERE b.user_auth_token = '${auth_token}'`;
+// 		const results = await db.query(sql);
+// 		if (!results && results.row.length === 0)
+// 			throw new Error('No followers found for user');
+// 		res.locals.follows = results.rows;
+// 		return next();
+// 	} catch (err) {
+// 		console.log(err);
+// 		return next({
+// 			log: 'Error in userController.getUser',
+// 			message: {
+// 				err: `userController.getUser: ERROR: ${err}`,
+// 			},
+// 		});
+// 	}
+// };
 
 //! handle duplicate
-userController.addFollow = async (req, res, next) => {
-	const { auth_token } = req.body;
-	try {
-		if (res.locals.follows) {
-			res.locals.follows.forEach(row => {
-				if (row.user_auth_token === auth_token) return next(); //user already follows this person
-			});
-		}
-		//user_id, follower_id
-		res.locals.follows = await db.query(
-			'INSERT INTO public.followers (user_id, follower_id) VALUES ($1, $2)',
-			data
-		);
-		return next();
-	} catch (err) {
-		console.log(err);
-		return next({
-			log: 'Error in userController.getUser',
-			message: {
-				err: 'userController.getUser: ERROR: failed to find user',
-			},
-		});
-	}
-};
+// userController.addFollow = async (req, res, next) => {
+// 	const { auth_token } = req.body;
+// 	try {
+// 		if (res.locals.follows) {
+// 			res.locals.follows.forEach(row => {
+// 				if (row.user_auth_token === auth_token) return next(); //user already follows this person
+// 			});
+// 		}
+// 		//user_id, follower_id
+// 		res.locals.follows = await db.query(
+// 			'INSERT INTO public.followers (user_id, follower_id) VALUES ($1, $2)',
+// 			data
+// 		);
+// 		return next();
+// 	} catch (err) {
+// 		console.log(err);
+// 		return next({
+// 			log: 'Error in userController.getUser',
+// 			message: {
+// 				err: 'userController.getUser: ERROR: failed to find user',
+// 			},
+// 		});
+// 	}
+// };
 
 
-userController.likePost = async (req, res, next) => {
-	try {
-	} catch (err) {
-		console.log(err);
-		return next({
-			log: 'Error in userController.getUser',
-			message: {
-				err: 'userController.getUser: ERROR: failed to find user',
-			},
-		});
-	}
-};
+// userController.likePost = async (req, res, next) => {
+// 	try {
+// 	} catch (err) {
+// 		console.log(err);
+// 		return next({
+// 			log: 'Error in userController.getUser',
+// 			message: {
+// 				err: 'userController.getUser: ERROR: failed to find user',
+// 			},
+// 		});
+// 	}
+// };
 
 userController.deleteUser = async (req, res, next) => {};
 

@@ -41,9 +41,6 @@ const style = {
     alignItems: 'center',
     padding: '0px 24px',
   },
-  h1: {
-    fontFamily: '"Roboto", sans-serif'
-  },
   a: {
     color: 'black',
     opacity: '0.75',

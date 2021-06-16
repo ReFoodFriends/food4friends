@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const ShowPosts = () => {
   return (
     <section style={style.content}>
