@@ -33,10 +33,23 @@ module.exports = {
     }),
   ],
   devServer: {
-    contentBase: path.join(__dirname, './build'),
-    proxy: {
-      '/api': 'http://localhost:3000',
-    },
+    host: 'localhost',
+    port: 8080,
+    // match the output path
+    contentBase: path.resolve(__dirname, 'build'),
+    // enable HMR on the devServer
     hot: true,
+    // match the output 'publicPath'
+    publicPath: '/',
+    // fallback to root for other urls
+    historyApiFallback: true,
+    inline: true,
+    headers: { 'Access-Control-Allow-Origin': '*' },
+    proxy: {
+      '/api/**': {
+        target: 'http://localhost:3000',
+        secure: false
+      }
+    }
   },
 };

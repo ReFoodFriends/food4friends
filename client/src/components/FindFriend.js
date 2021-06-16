@@ -63,7 +63,6 @@ const style = {
     backgroundColor: 'hsla(31, 100%, 56%, 1)',
     borderRadius: '5px',
     border: 'solid hsla(31, 100%, 56%, 1)',
-    fontFamily: '"Roboto", sans-serif',
     fontSize: '18px',
   },
   result: {

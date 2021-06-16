@@ -4,6 +4,14 @@ CREATE TABLE public.users (
   "user_auth_token" varchar NOT NULL
 );
 
+CREATE TABLE public.localUsers (
+  "_id" serial primary key,
+  "email" varchar NOT NULL,
+  "name" varchar NOT NULL
+  "password" varchar NOT NULL
+  "cookie" varchar NOT NULL
+);
+
 CREATE TABLE public.posts (
   "_id" serial primary key,
   "category" varchar NOT NULL,

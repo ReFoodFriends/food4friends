@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const CreatePost = () => {
   const [post, setPost] = useState('');
 
   // TODO: handle posting logic here
-  const handlePostClick = () => {};
+  const handlePostClick = () => {
+    console.log('sharing this crap with yall');
+  };
 
   const handleTextAreaChange = (e) => {
     setPost(e.target.value);
@@ -53,7 +56,6 @@ const style = {
     border: 'solid hsla(31, 100%, 56%, 1)',
     borderRadius: '10px',
     padding: '16px',
-    fontFamily: '"Roboto", sans-serif',
     fontSize: '18px',
   },
 };

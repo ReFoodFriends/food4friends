@@ -4,7 +4,7 @@ import CreatePost from './CreatePost';
 import FindFriend from './FindFriend';
 import ShowPosts from './ShowPosts';
 
-const Feed = () => {
+const Menu = () => {
   const [currentTab, setCurrentTab] = useState(1);
 
   return (
@@ -51,7 +51,6 @@ const style = {
     gap: '24px',
     paddingTop: '48px',
     height: '90vh',
-    fontFamily: '"Roboto", sans-serif',
     fontSize: '18px',
   },
   tabs: {
@@ -93,4 +92,4 @@ const style = {
   },
 };
 
-export default Feed;
+export default Menu;

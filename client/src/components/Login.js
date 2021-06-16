@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+// import './Login.css';
 
 const Login = ({ setUser }) => {
   const handleSignInClick = () => {
@@ -36,6 +38,23 @@ const Login = ({ setUser }) => {
     <main style={style.main}>
       <section style={style.section}>
         <h1 style={style.h1}>See what&apos;s cookin&apos;{'  '}</h1>
+        <form onSubmit={null}>
+          <div>
+            <label htmlFor="email">Email</label>
+            <input name="email" placeholder='Email' id="email" type="email" autoComplete="off" required/>
+          </div>
+          <div>
+            <label htmlFor="password">Password</label>
+            <input name="password" placeholder='Password' id="password" type="password" required/>
+          </div>
+          <div>
+            <button id="login__btn" type="submit"> Login </button>
+            <span id="signup-redirect">Not a User? <Link to='/signup' id="login-form__signup-btn">Sign Up</Link> </span>
+          </div>
+          <div className="signup__message">
+          </div>
+        </form>
+        <hr></hr>
         <Button
           variant='contained'
           style={style.loginButton}
@@ -67,9 +86,6 @@ const style = {
     border: 'solid hsla(31, 100%, 56%, 1)',
     padding: '36px 60px',
     borderRadius: '8px',
-  },
-  h1: {
-    fontFamily: '"Roboto", sans-serif',
   },
   loginButton: {
     color: 'white',
