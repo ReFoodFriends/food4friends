@@ -39,6 +39,30 @@ userController.addUser = async (req, res, next) => {
   return next();
 };
 
+userController.verifyUser = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const searchQuery = "SELECT password, cookie FROM localuser where email = $1";
+  const searchParams = [email];
+  let hashedPass;
+  try {
+    const { rows } = await db.query(searchQuery, searchParams);
+    console.log("return array of obj", rows);
+    // [{password: fdashjfksda, cookie: jdfaslk}]
+    if (rows.length) hashedPass = rows[0].password;
+    else return next({ err: "cannot find password for some reason " });
+    const passwordMatched = bcrypt.compare(password, hashedPass);
+    if (passwordMatched) {
+      res.locals.email = email;
+      res.cookie("SSID", rows[0].cookie);
+    } else {
+      return next({ err: "invalid password" });
+    }
+    return next();
+  } catch (e) {
+    return next({ err: "error with searching for user pass in db: " + e });
+  }
+};
 
 userController.loginOrCreateUser = async (req, res, next) => {
 	const { name, auth_token, email } = req.body;
@@ -64,19 +88,59 @@ userController.loginOrCreateUser = async (req, res, next) => {
 	}
 };
 
+userController.checkCookie = async (req, res, next) => {
+	console.log('arrive here');
+	console.log(req.cookies);
+	const cookie = req.cookies.SSID;
+	const searchQuery = 'SELECT email FROM localusers WHERE cookie = $1';
+	const searchParams = [cookie];
+	try {
+		const {rows} = await db.query(searchQuery, searchParams);
+		console.log(rows);
+		res.locals.email = rows[0].email;
+		return next();
+	} catch(e) {
+		return next({err: 'error at db search for check cookie' + e});
+	}
+};
+
+// userController.addPost = async (req, res, next) => {
+// 	try {
+// 		//[category, content, date, creator_id]
+// 		const dataArray = [
+// 			'brazilian',
+// 			'all you can eat with every cut you can imagine!',
+// 			new Date(),
+// 			2,
+// 		];
+// 		res.locals.post = await db.query(
+// 			'INSERT INTO public.posts (category, content, date, creator_id) VALUES ($1, $2, $3, $4)',
+// 			dataArray
+// 		);
+// 		return next();
+// 	} catch (err) {
+// 		console.log(err);
+// 		return next({
+// 			log: 'Error in userController.getUser',
+// 			message: {
+// 				err: 'userController.getUser: ERROR: failed to find user',
+// 			},
+// 		});
+// 	}
+// };
+
 userController.addPost = async (req, res, next) => {
+	const { email, category, content } = req.body;
+	const date = new Date().toDateString();
+	console.log(date);
+	console.log(typeof date);
+
 	try {
 		//[category, content, date, creator_id]
-		const dataArray = [
-			'brazilian',
-			'all you can eat with every cut you can imagine!',
-			new Date(),
-			2,
-		];
-		res.locals.post = await db.query(
-			'INSERT INTO public.posts (category, content, date, creator_id) VALUES ($1, $2, $3, $4)',
-			dataArray
-		);
+		const insertQuery = 'INSERT INTO posts (category, content, date, creator_id) VALUES ($1, $2, $3, (SELECT id FROM localuser WHERE email = $4))';
+		const insertParams = [category, content, date, email];
+		res.locals.post = await db.query(insertQuery, insertParams);
+		console.log(res.locals.post);
 		return next();
 	} catch (err) {
 		console.log(err);
@@ -88,6 +152,7 @@ userController.addPost = async (req, res, next) => {
 		});
 	}
 };
+
 
 //for a logged in user ID, return all posts of users that they follow
 userController.getFeed = async (req, res, next) => {

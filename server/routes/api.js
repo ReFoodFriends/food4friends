@@ -9,6 +9,14 @@ router.post('/signup', userController.addUser, (req, res) =>
   res.status(200).json({email: res.locals.email})
 );
 
+router.post('/login', userController.verifyUser, (req, res) =>
+  res.status(200).json({email: res.locals.email})
+);
+
+router.get('/verifyWithCookie', userController.checkCookie, (req, res) => {
+  return res.status(200).json({email: res.locals.email});
+});
+
 router.get('/login', userController.loginOrCreateUser, (req, res) =>
   res.status(200).json(res.locals.user)
 );

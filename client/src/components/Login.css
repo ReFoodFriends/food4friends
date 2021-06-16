@@ -26,7 +26,7 @@
   font-weight: bold;
 }
 
-.loginScreen__form-container > form {
+#login-form form {
   display: flex;
   height: 100%;
   width: 100%;
@@ -34,30 +34,30 @@
   justify-content: space-evenly;
 }
 
-.loginScreen__form-container > form > div {
+#login-form > div {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.loginScreen__form-container > form > div > label {
-  color: #fff;
+#login-form > div > label {
+  color: #000;
 } 
 
-.loginScreen__form-container > form > div > input {
-  padding: .7rem;
+#login-form > div > input {
+  padding: .5rem;
   border: solid 1px #3488ce;
-  border-radius: 8px;
+  border-radius: 3px;
   margin-top: 3px;
   margin-bottom: 7px;
 }
 
 #login__btn {
-  padding: 10px 0;
+  padding: 8px 0;
   background-color: #3488ce;
   color: #fff;
   border: solid 2px #3488ce;
-  border-radius: 8px;
+  border-radius: 3px;
   font-weight: 500;
   margin-top: 20px;
   cursor: pointer;

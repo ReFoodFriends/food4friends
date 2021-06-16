@@ -44,7 +44,7 @@ const SignupScreen = (props) => {
         // setUser
         console.log(props.user);
         console.log(props.setUser);
-        props.setUser( { loggedIn: true });
+        props.setUser( { loggedIn: true, email: email });
       })
       .catch(err => console.log(err));
   };
