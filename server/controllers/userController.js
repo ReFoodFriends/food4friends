@@ -7,23 +7,23 @@ const userController = {};
 userController.addUser = async (req, res, next) => {
   // req.body = { username: 'rabbit', password: 'carrot'}
   const { email, name, password } = req.body;
-  const searchQuery = "SELECT email FROM localuser where email = $1";
+  const searchQuery = 'SELECT email FROM localuser where email = $1';
   const searchParams = [email];
 	console.log('reached here');
   try {
     const { rowCount } = await db.query(searchQuery, searchParams);
-    console.log("number of matches in db", rowCount);
+    console.log('number of matches in db', rowCount);
     if (rowCount)
-      return next({ err: "error with username found already in db" });
+      return next({ err: 'error with username found already in db' });
   } catch (e) {
-    return next({ err: "error with searching username in db: " + e });
+    return next({ err: 'error with searching username in db: ' + e });
   }
 
   const hashedPass = await bcrypt.hash(password, 5);
-  const cookie = email + " hello cookie";
+  const cookie = email + ' hello cookie';
   // insert into db
   const insertQuery =
-    "INSERT INTO localuser (email, name, password, cookie) VALUES ($1, $2, $3, $4)";
+    'INSERT INTO localuser (email, name, password, cookie) VALUES ($1, $2, $3, $4)';
   const insertParams = [email, name, hashedPass, cookie];
   // const createTableQuery = `CREATE TABLE ${username}_history(id SERIAL PRIMARY KEY, date varchar NOT NULL, habit_id int NOT NULL, task_id int NOT NULL, description varchar, requirement int, completion int DEFAULT 0, isWeekly int DEFAULT 0, CONSTRAINT fk_habit FOREIGN KEY (habit_id) REFERENCES habit(id) ON DELETE cascade, CONSTRAINT fk_task FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE cascade )`;
   try {
@@ -31,36 +31,36 @@ userController.addUser = async (req, res, next) => {
     // await db.query(createTableQuery);
   } catch (e) {
     // fill in error message
-    return next({ err: "error with db query in addUser: " + e });
+    return next({ err: 'error with db query in addUser: ' + e });
   }
-  console.log("successfully signuped");
+  console.log('successfully signuped');
   res.locals.email = email;
-  res.cookie("SSID", cookie);
+  res.cookie('SSID', cookie);
   return next();
 };
 
 userController.verifyUser = async (req, res, next) => {
   const { email, password } = req.body;
 
-  const searchQuery = "SELECT password, cookie FROM localuser where email = $1";
+  const searchQuery = 'SELECT password, cookie FROM localuser where email = $1';
   const searchParams = [email];
   let hashedPass;
   try {
     const { rows } = await db.query(searchQuery, searchParams);
-    console.log("return array of obj", rows);
+    console.log('return array of obj', rows);
     // [{password: fdashjfksda, cookie: jdfaslk}]
     if (rows.length) hashedPass = rows[0].password;
-    else return next({ err: "cannot find password for some reason " });
+    else return next({ err: 'cannot find password for some reason ' });
     const passwordMatched = bcrypt.compare(password, hashedPass);
     if (passwordMatched) {
       res.locals.email = email;
-      res.cookie("SSID", rows[0].cookie);
+      res.cookie('SSID', rows[0].cookie);
     } else {
-      return next({ err: "invalid password" });
+      return next({ err: 'invalid password' });
     }
     return next();
   } catch (e) {
-    return next({ err: "error with searching for user pass in db: " + e });
+    return next({ err: 'error with searching for user pass in db: ' + e });
   }
 };
 
@@ -89,10 +89,10 @@ userController.loginOrCreateUser = async (req, res, next) => {
 };
 
 userController.checkCookie = async (req, res, next) => {
-	console.log('arrive here');
-	console.log(req.cookies);
+	// console.log('arrive here');
+	// console.log(req.cookies);
 	const cookie = req.cookies.SSID;
-	const searchQuery = 'SELECT email FROM localusers WHERE cookie = $1';
+	const searchQuery = 'SELECT email FROM localuser WHERE cookie = $1';
 	const searchParams = [cookie];
 	try {
 		const {rows} = await db.query(searchQuery, searchParams);
@@ -132,8 +132,8 @@ userController.checkCookie = async (req, res, next) => {
 userController.addPost = async (req, res, next) => {
 	const { email, category, content } = req.body;
 	const date = new Date().toDateString();
-	console.log(date);
-	console.log(typeof date);
+	// console.log(date);
+	// console.log(typeof date);
 
 	try {
 		//[category, content, date, creator_id]
@@ -148,6 +148,25 @@ userController.addPost = async (req, res, next) => {
 			log: 'Error in userController.getUser',
 			message: {
 				err: 'userController.getUser: ERROR: failed to find user',
+			},
+		});
+	}
+};
+// ${req.params.email})
+
+userController.getUserPosts  = async (req, res, next) => {
+	const query = 'SELECT category, content, date FROM posts WHERE creator_id=(SELECT id FROM localuser WHERE email = $1)';
+	const queryParams = [res.locals.email];
+	try{
+		const queryRes = await db.query(query, queryParams).catch(err => console.log(err));
+		res.locals.userPosts = queryRes.rows;
+	return next();
+	} catch(err) {
+		console.log(err);
+		return next({
+			log: 'Error in userController.getUserPosts',
+			message: {
+				err: 'userController.getUserPOsts: ERROR: failed to find posts',
 			},
 		});
 	}

@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import './Login.css';
 
-const Login = ({ setUser }) => {
+const Login = ({ user, setUser }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -15,10 +15,24 @@ const Login = ({ setUser }) => {
 
     axios.post('/api/login', { email, password })
       .then(response => {
-        setUser({ loggedIn: true, email: email });
+        console.log(response);
+        console.log('state before setting user at login', user);
+        console.log('checking if set user is defined', setUser);
+        setUser({ loggedIn: true, email: email, posts: response.data.posts});
+        console.log('logging users from login.js', user);
       })
       .catch(err => console.log(err));
+    
+    // loadUserPosts();
   };
+
+  // const loadUserPosts = () => {
+  //   axios.get(`/api/user-posts/${email}`)
+  //     .then(response => {
+  //       setUser({ post: response.data });
+  //     })
+  //     .catch(err => console.log.log(err));
+  // };
 
 
   // Handle SIGNIN for Google OAuth

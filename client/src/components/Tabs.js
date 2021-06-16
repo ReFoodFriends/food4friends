@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CreatePost from './CreatePost';
 import FindFriend from './FindFriend';
 import ShowPosts from './ShowPosts';
+import MyPosts from './MyPosts';
+import axios from 'axios';
 
 const Tabs = ({ user, setUser }) => {
   const [currentTab, setCurrentTab] = useState(1);
+  const { email } = user;
+
+  console.log('logging state from tabs.js', user);
 
   return (
     <main style={style.main}>
@@ -13,9 +18,10 @@ const Tabs = ({ user, setUser }) => {
         <Link
           to='/'
           onClick={() => setCurrentTab(0)}
+
           style={currentTab === 0 ? style.selected : style.tab}
         >
-          i made something yummy
+          Create Post
         </Link>
         <Link
           to='/'
@@ -23,20 +29,28 @@ const Tabs = ({ user, setUser }) => {
           style={currentTab === 1 ? style.selected : style.tab}
         >
           {/* eslint-disable-next-line react/no-unescaped-entities */}
-          what are my friends cookin'?
+          My Feed
         </Link>
         <Link
           to='/'
           onClick={() => setCurrentTab(2)}
           style={currentTab === 2 ? style.selected : style.tab}
         >
-          find more chefriends
+          My Posts
+        </Link>
+        <Link
+          to='/'
+          onClick={() => setCurrentTab(3)}
+          style={currentTab === 3 ? style.selected : style.tab}
+        >
+          Find Friends
         </Link>
       </section>
       <section style={style.content}>
         {currentTab === 0 && <CreatePost user={user} setUser={setUser} />}
         {currentTab === 1 && <ShowPosts />}
-        {currentTab === 2 && <FindFriend />}
+        {currentTab === 2 && <MyPosts user={user} />}
+        {currentTab === 3 && <FindFriend />}
       </section>
     </main>
   );

@@ -9,12 +9,12 @@ router.post('/signup', userController.addUser, (req, res) =>
   res.status(200).json({email: res.locals.email})
 );
 
-router.post('/login', userController.verifyUser, (req, res) =>
-  res.status(200).json({email: res.locals.email})
+router.post('/login', userController.verifyUser, userController.getUserPosts, (req, res) =>
+  res.status(200).json({email: res.locals.email, posts: res.locals.userPosts})
 );
 
-router.get('/verifyWithCookie', userController.checkCookie, (req, res) => {
-  return res.status(200).json({email: res.locals.email});
+router.get('/verifyWithCookie', userController.checkCookie, userController.getUserPosts, (req, res) => {
+  return res.status(200).json({email: res.locals.email, posts: res.locals.userPosts});
 });
 
 router.get('/login', userController.loginOrCreateUser, (req, res) =>
@@ -23,6 +23,10 @@ router.get('/login', userController.loginOrCreateUser, (req, res) =>
 
 router.post('/post', userController.addPost, (req, res) =>
   res.status(200).json(res.locals.post)
+);
+
+router.get('/user-posts/:email', userController.getUserPosts, (req, res) =>
+  res.status(200).json(res.locals.userPosts)
 );
 
 router.get('/getFeed', userController.getFeed, (req, res) =>

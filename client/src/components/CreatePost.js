@@ -11,10 +11,10 @@ const CreatePost = ({ user, setUser }) => {
   const handlePostClick = (e) => {
     e.preventDefault();
     axios.post('/api/post', { email, category, content })
-    .then(response => {
-      console.log(response);
-    })
-    .catch(err => console.log(err));
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => console.log(err));
   };
 
   const handleTextAreaChange = (e) => {

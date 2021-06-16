@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Post from './Post';
+import './MyPosts.css';
 
-const Post = () => {
+
+const MyPosts = ({ user }) => {
+  const postsArr = user.posts.map((post, idx) => <Post key={idx} content={post.content} date={post.date} category={post.category} />);
+
   return (
-    <article style={style.post}>
-      <h3>Abhi&apos;s bacon breakfast</h3>
-      <p>I made the most amazing meal oh my gosh</p>
-    </article>
+    <div style={style.postContainer}>
+      {postsArr}
+    </div>
   );
 };
-
 
 const style = {
   content: {
@@ -24,6 +27,7 @@ const style = {
     opacity: '0.75',
   },
   postContainer: {
+    padding: '15px',
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     gridGap: '12px',
@@ -36,4 +40,4 @@ const style = {
   },
 };
 
-export default Post;
+export default MyPosts;
