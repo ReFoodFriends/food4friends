@@ -4,7 +4,7 @@ CREATE TABLE public.users (
   "user_auth_token" varchar NOT NULL
 );
 
-CREATE TABLE public.localUsers (
+CREATE TABLE public.localUser (
   "_id" serial primary key,
   "email" varchar NOT NULL,
   "name" varchar NOT NULL

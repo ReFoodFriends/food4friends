@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-// import './Login.css';
+import axios from 'axios';
+import './Login.css';
 
 const Login = ({ setUser }) => {
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
+  // /aoi/login    post request    { email, password }
+  // Handle manual login
+  const formSignIn = (e) => {
+    e.preventDefault();
+
+    axios.post('/api/login', { email, password })
+      .then(response => {
+        setUser({ loggedIn: true, email: email });
+      })
+      .catch(err => console.log(err));
+  };
+
+
+  // Handle SIGNIN for Google OAuth
   const handleSignInClick = () => {
     window.gapi.load('auth2', () => {
       window.gapi.auth2
@@ -38,14 +56,14 @@ const Login = ({ setUser }) => {
     <main style={style.main}>
       <section style={style.section}>
         <h1 style={style.h1}>See what&apos;s cookin&apos;{'  '}</h1>
-        <form onSubmit={null}>
+        <form onSubmit={formSignIn} id="login-form">
           <div>
             <label htmlFor="email">Email</label>
-            <input name="email" placeholder='Email' id="email" type="email" autoComplete="off" required/>
+            <input name="email" placeholder='Email' id="email" type="email" autoComplete="off" required onChange={(e) => setEmail(e.target.value)}/>
           </div>
           <div>
             <label htmlFor="password">Password</label>
-            <input name="password" placeholder='Password' id="password" type="password" required/>
+            <input name="password" placeholder='Password' id="password" type="password" required onChange={(e) => setPassword(e.target.value)}/>
           </div>
           <div>
             <button id="login__btn" type="submit"> Login </button>
@@ -54,13 +72,12 @@ const Login = ({ setUser }) => {
           <div className="signup__message">
           </div>
         </form>
-        <hr></hr>
         <Button
           variant='contained'
           style={style.loginButton}
           onClick={handleSignInClick}
         >
-          Sign in with Google
+           Or sign in with Google
         </Button>
       </section>
     </main>

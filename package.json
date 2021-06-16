@@ -4,7 +4,7 @@
   "description": "",
   "main": "client/src/index.js",
   "scripts": {
-    "dev": "NODE_ENV=development concurrently \"node server/server.js\" \"webpack serve --open\"",
+    "dev": "NODE_ENV=development concurrently \"nodemon server/server.js\" \"webpack serve --open\"",
     "server": "node server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

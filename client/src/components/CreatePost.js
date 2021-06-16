@@ -1,31 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const CreatePost = () => {
-  const [post, setPost] = useState('');
+// /api/post  postreq   { email, category, content } = req body   
 
+const CreatePost = ({ user, setUser }) => {
+  const email = user.email;
+  const [content, setContent] = useState('');
+  const [category, setCategory] = useState();
   // TODO: handle posting logic here
-  const handlePostClick = () => {
-    console.log('sharing this crap with yall');
+  const handlePostClick = (e) => {
+    e.preventDefault();
+    axios.post('/api/post', { email, category, content })
+    .then(response => {
+      console.log(response);
+    })
+    .catch(err => console.log(err));
   };
 
   const handleTextAreaChange = (e) => {
-    setPost(e.target.value);
+    setContent(e.target.value);
   };
 
   return (
-    <article style={style.content}>
+    <form style={style.content} onSubmit={handlePostClick}>
       <h1 style={style.h1}>what did you make?</h1>
       <textarea
-        value={post}
+        value={content}
         onChange={handleTextAreaChange}
         style={style.textarea}
         type='text'
       />
-      <button onClick={handlePostClick} style={style.share}>
+      <div id="createPost__category-input">
+        <label htmlFor="category-input">What type of food is this?</label>
+        <input id="category-input" type="text" placeholder="Pasta" required onChange={(e) => setCategory(e.target.value)}/>
+      </div>
+      <button type="submit" style={style.share}>
         Share with my foodie friends
       </button>
-    </article>
+    </form>
   );
 };
 

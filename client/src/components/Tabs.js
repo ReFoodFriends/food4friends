@@ -4,7 +4,7 @@ import CreatePost from './CreatePost';
 import FindFriend from './FindFriend';
 import ShowPosts from './ShowPosts';
 
-const Menu = () => {
+const Tabs = ({ user, setUser }) => {
   const [currentTab, setCurrentTab] = useState(1);
 
   return (
@@ -34,7 +34,7 @@ const Menu = () => {
         </Link>
       </section>
       <section style={style.content}>
-        {currentTab === 0 && <CreatePost />}
+        {currentTab === 0 && <CreatePost user={user} setUser={setUser} />}
         {currentTab === 1 && <ShowPosts />}
         {currentTab === 2 && <FindFriend />}
       </section>
@@ -92,4 +92,4 @@ const style = {
   },
 };
 
-export default Menu;
+export default Tabs;
