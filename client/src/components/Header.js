@@ -25,7 +25,7 @@ const Header = ({ loggedIn, setUser }) => {
     <nav className="navbar">
       <h1>
         <Link to='/'>
-            foodie friends
+            Foodie Friends
         </Link>
       </h1>
       {loggedIn && (

@@ -1,4 +1,4 @@
-.my-posts__post-container{
+.feed__container{
   height: 600px;
   display: flex;
   flex-direction: column;
@@ -7,6 +7,6 @@
   overflow: scroll;
 }
 
-.my-posts__post-container> article:nth-of-type(1) {
+.feed__container > article:nth-of-type(1) {
   margin-top: 50px;
 }

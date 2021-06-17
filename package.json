@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "NODE_ENV=development concurrently \"nodemon server/server.js\" \"webpack serve --open\"",
     "server": "node server/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test2": "jest.test.jest.js"
   },
   "repository": {
     "type": "git",

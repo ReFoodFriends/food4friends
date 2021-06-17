@@ -4,9 +4,10 @@
   "env": {
     "node": true,
     "browser": true,
-    "es2021": true
+    "es2021": true,
+    "jest": true
   },
-  "plugins": ["react"],
+  "plugins": ["react", "jest"],
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parserOptions": {
     "sourceType": "module",

@@ -1,0 +1,57 @@
+.findFriend__screen {
+  width: 75%;
+  height: 550px;
+  padding: 2rem 0 0 0 ;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.findFriend__screen > h1 {
+  text-align: center;
+  font-family: "Lobster Two";
+  font-weight: 400;
+  font-size: 1.8rem;
+}
+
+.findFriend__form {
+  background: linear-gradient(to right, #4c5aca, #7751c2, #9747b6, #b03ca7, #c33096, #d22c87, #dd2d78, #e43468, #ea4459, #ed554b, #ed663d, #e97731);
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+
+.findFriend__form > input {
+  border: none;
+  font-size: 1.1rem;
+  width: 75%;
+  border-radius: 3px;
+  padding: 0 5px
+}
+
+.findFriend__form > input:focus,
+.findFriend__form > input:active {
+  outline: none;
+}
+
+.findFriend__form > button {
+  width: 23%;
+  margin: 0;
+  padding: 10px 12px;
+  border: none;
+  background-color: #634cca;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 3px;
+  transition: .3s all ease;
+}
+
+.findFriend__form > button:hover {
+ background-color: #4f3ca7;
+}
+

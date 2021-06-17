@@ -74,9 +74,9 @@
 }
 
 .signupScreen__form-container > form > div > button:hover {
-  background-color: #28699e;
-  border-color: #28699e;
+  border-color: #4f3ca7;
   color: #fff;
+  background-color: #4f3ca7;
 }
 
 #form__cancel-btn {

@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CreatePost from './CreatePost';
 import FindFriend from './FindFriend';
-import ShowPosts from './ShowPosts';
+import Feed from './Feed';
 import MyPosts from './MyPosts';
 import axios from 'axios';
 
 import '../../public/stylesheets/Tabs.css';
 
 const Tabs = ({ user, setUser }) => {
-  const [currentTab, setCurrentTab] = useState(1);
+  const [currentTab, setCurrentTab] = useState(0);
   const { email } = user;
 
   console.log('logging state from tabs.js', user);
@@ -41,7 +41,7 @@ const Tabs = ({ user, setUser }) => {
           onClick={() => setCurrentTab(2)}
           style={currentTab === 2 ? style.active : style.tab}
         >
-          <i className="fas fa-inbox"></i>
+          <i className="fas fa-list"></i>
         </Link>
         <Link
           to='/'
@@ -52,12 +52,14 @@ const Tabs = ({ user, setUser }) => {
           <i className="fas fa-user-plus"></i>
         </Link>
       </section>
-      <section className="tabs__content">
+      <div id="content__gradient-bg">
+        <section className="tabs__content">
         {currentTab === 0 && <CreatePost user={user} setUser={setUser} />}
-        {currentTab === 1 && <ShowPosts />}
+        {currentTab === 1 && <Feed />}
         {currentTab === 2 && <MyPosts user={user} />}
         {currentTab === 3 && <FindFriend />}
-      </section>
+        </section>
+      </div>
     </main>
   );
 };
@@ -76,8 +78,18 @@ const style = {
     transition: 'all 200ms ease-out'
   },
   active: {
-    transform: 'translateY(-3px)',
-    boxShadow: 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px'
+    transform: 'translateY(-5px)',
+    boxShadow: 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
+    width: '100%',
+    padding: '1rem',
+    color: '#fff',
+    textDecoration: 'none',
+    textAlign: 'center',
+    fontSize: '1.2rem',
+    borderRadius: '5px',
+    border: 'none',
+    background: 'linear-gradient(to right, #4c5aca, #7751c2, #9747b6, #b03ca7, #c33096, #d22c87, #dd2d78, #e43468, #ea4459, #ed554b, #ed663d, #e97731)',
+    transition: 'all 200ms ease-out'
   },
   content: {
     width: '80vw',

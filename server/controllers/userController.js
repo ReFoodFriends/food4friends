@@ -130,7 +130,7 @@ userController.checkCookie = async (req, res, next) => {
 // };
 
 userController.addPost = async (req, res, next) => {
-	const { email, category, content } = req.body;
+	const { email, title, category, content } = req.body;
 	res.locals.email = email;
 	const date = new Date().toDateString();
 	// console.log(date);
@@ -138,8 +138,8 @@ userController.addPost = async (req, res, next) => {
 
 	try {
 		//[category, content, date, creator_id]
-		const insertQuery = 'INSERT INTO posts (category, content, date, creator_id) VALUES ($1, $2, $3, (SELECT id FROM localuser WHERE email = $4))';
-		const insertParams = [category, content, date, email];
+		const insertQuery = 'INSERT INTO posts (title, category, content, date, creator_id) VALUES ($1, $2, $3, $4, (SELECT id FROM localuser WHERE email = $5))';
+		const insertParams = [title, category, content, date, email];
 		await db.query(insertQuery, insertParams);
 		return next();
 	} catch (err) {
@@ -155,7 +155,7 @@ userController.addPost = async (req, res, next) => {
 // ${req.params.email})
 
 userController.getUserPosts = async (req, res, next) => {
-	const query = 'SELECT category, content, date FROM posts WHERE creator_id=(SELECT id FROM localuser WHERE email = $1)';
+	const query = 'SELECT category, content, date, title FROM posts WHERE creator_id=(SELECT id FROM localuser WHERE email = $1)';
 	const queryParams = [res.locals.email];
 	try {
 		const queryRes = await db.query(query, queryParams).catch(err => console.log(err));
@@ -174,30 +174,78 @@ userController.getUserPosts = async (req, res, next) => {
 
 
 //for a logged in user ID, return all posts of users that they follow
-userController.getFeed = async (req, res, next) => {
-	const { auth_token } = req.body;
-	const sql = `SELECT * from posts as a 
-	inner join followers as b on a.creator_id = b.user_id
-	inner join users as c on b.follower_id = c._id
-	WHERE c.user_auth_token = '${auth_token}'`;
-	try {
-		//querying for all user_ids that have this follower_id
-		const results = await db.query(sql);
+// userController.getFeed = async (req, res, next) => {
+// 	const { auth_token } = req.body;
+// 	const sql = `SELECT * from posts as a 
+// 	inner join followers as b on a.creator_id = b.user_id
+// 	inner join users as c on b.follower_id = c._id
+// 	WHERE c.user_auth_token = '${auth_token}'`;
+// 	try {
+// 		//querying for all user_ids that have this follower_id
+// 		const results = await db.query(sql);
 
-		if (results.rows.length === 0)
-			throw new Error('No results from Posts table');
-		res.locals.followedPosts = results.rows;
+// 		if (results.rows.length === 0)
+// 			throw new Error('No results from Posts table');
+// 		res.locals.followedPosts = results.rows;
+// 		return next();
+// 	} catch (err) {
+// 		console.log(err);
+// 		return next({
+// 			log: 'Error in userController.getUser',
+// 			message: {
+// 				err: `userController.getUser: ERROR:${err}`,
+// 			},
+// 		});
+// 	}
+// };
+
+userController.findPeople = async (req, res, next) => {
+	// url -> host/api/findPeople/:name
+	const searchQuery1 = 'SELECT name, email FROM localuser WHERE name LIKE $1 AND id IN (SELECT follower_id FROM directed_followers WHERE followee_id = (SELECT id FROM localuser WHERE email = $2) )';
+	const searchQuery2 = 'SELECT name, email FROM localuser WHERE name LIKE $1 AND id IN (SELECT follower_id FROM directed_followers WHERE followee_id = (SELECT id FROM localuser WHERE email = $2) )';
+	const searchParams = [req.params.name + '%', req.params.email];
+	try{
+		const { rows: alreadyFollow } = await db.query(searchQuery1, searchParams);
+		console.log('already following',alreadyFollow);
+		res.locals.alreadyFollow = alreadyFollow;
+		const { rows: notFollow } = await db.query(searchQuery2, searchParams);
+		console.log('not following',notFollow);
+		res.locals.notFollow = notFollow;
 		return next();
-	} catch (err) {
-		console.log(err);
-		return next({
-			log: 'Error in userController.getUser',
-			message: {
-				err: `userController.getUser: ERROR:${err}`,
-			},
-		});
+	} catch(e) {
+		return next({message: {err: 'error at finding people: ' + e}});
+	}
+
+};
+
+userController.getFollowPosts = async (req, res, next) => {
+	const searchQuery = 'SELECT category, content, date, name FROM posts WHERE creator_id IN (SELECT followee_id FROM directed_followers WHERE follower_id = (SELECT id FROM localuser WHERE email = $1)) LEFT JOIN localuser ON followee_id = localuser.id';
+	const searchParams = [req.params.email];
+	try {
+		const { rows } = await db.query(searchQuery, searchParams);
+		console.log(rows);
+		res.locals.followPosts = rows;
+		return next(); 
+	} catch(e) {
+		return next({message: {err: 'error at getting follow posts: ' + e}});
 	}
 };
+
+userController.followUser = async (req, res, next) => {
+	// expecting { followee: ,follower: } in req body
+	const { followee, follower } = req.body;
+	const insertQuery = 'INSERT INTO directed_followers(followee_id, follower_id) VALUES( (SELECT id FROM localuser WHERE email = $1), (SELECT id FROM localuser WHERE email = $2))';
+	const insertParams = [followee, follower];
+	try {
+		await db.query(insertQuery, insertParams);
+		console.log('successfully');
+		return next();
+	} catch(e) {
+		return next({message: {err: 'error at following user: '+ e}})
+	}
+};
+
+
 
 // userController.searchUsers = async (req, res, next) => {
 // 	const {name} = req.body;

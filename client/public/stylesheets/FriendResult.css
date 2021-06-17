@@ -1,0 +1,39 @@
+.findFriend__result-container {
+  height: 100%;
+  padding: 0 16px;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.search__result {
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.search__result > h3 {
+  font-weight: 400;
+}
+
+.search__result > button {
+  width: 10%;
+  padding: 12px 10px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(to right bottom, #4c5aca, #7751c2, #9747b6, #b03ca7, #c33096, #d22c87, #dd2d78, #e43468, #ea4459, #ed554b, #ed663d, #e97731);
+  border-radius: 5px;
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+}
+
+.search__result > button:hover {
+  transform: translateY(-3px);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
