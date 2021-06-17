@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+import '../../public/stylesheets/FindFriend.css';
+
+
 const FindFriend = () => {
   const [search, setSearch] = useState('');
   const [results, setResults] = useState(['a']);

@@ -1,12 +1,14 @@
 import { hot } from 'react-hot-loader/root';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from './Header';
 import Login from './Login';
 import SignUp from './SignUp';
 import Tabs from './Tabs';
 // import CreatePost from './CreatePost';
+
+import '../../public/stylesheets/App.css';
+
 
 import axios from 'axios';
 import { SettingsInputAntennaTwoTone } from '@material-ui/icons';
@@ -34,7 +36,6 @@ const App = () => {
 
   return (
     <Router>
-      <CssBaseline />
       <Header loggedIn={user.loggedIn} setUser={setUser} />
       <Switch>
         {/* <Route path='/create-post'>

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import '../../public/stylesheets/ShowPosts.css';
+
 
 const ShowPosts = () => {
   return (

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import '../../public/stylesheets/CreatePost.css';
+
 // /api/post  postreq   { email, category, content } = req body   
 
 const CreatePost = ({ user, setUser }) => {

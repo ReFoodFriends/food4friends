@@ -1,5 +1,8 @@
 import React from 'react';
 
+import '../../public/stylesheets/Post.css';
+
+
 const Post = ({ content, category, date }) => {
   return (
     <article style={style.post}>

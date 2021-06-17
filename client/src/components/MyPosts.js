@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Post from './Post';
-import './MyPosts.css';
+import '../../public/stylesheets/MyPosts.css';
+
 
 
 const MyPosts = ({ user }) => {

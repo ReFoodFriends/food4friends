@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital@0;1&display=swap');
+
+.navbar {
+  width: 100%;
+  height: 90px;
+  padding: 0 1.4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to right, #4c5aca, #7751c2, #9747b6, #b03ca7, #c33096, #d22c87, #dd2d78, #e43468, #ea4459, #ed554b, #ed663d, #e97731);
+}
+
+.navbar > h1 {
+  font-family: "Lobster Two", serif;
+  margin-top: -5px;
+}
+
+.navbar > h1 > a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 2.3rem;
+}
+
+.navbar > h1 > a:hover {
+  
+}
+
+.navbar__logout {
+  background-color: transparent;
+  font-size: 1.3rem;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
