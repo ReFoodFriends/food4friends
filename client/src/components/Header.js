@@ -1,10 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
+// import { useCookies } from "react-cookie";
 
-const Header = ({ loggedIn }) => {
+const Header = ({ loggedIn, setUser }) => {
+
+  // const [removeCookie] = useCookies(['SSID']);
   // TODO: sign out from Google OAuth API
-  const handleLogoutClick = () => {};
+  const handleLogoutClick = (e) => {
+    e.preventDefault();
+    if(loggedIn) {
+      setUser({ loggedIn: false, email: null});
+      delete_cookie('SSID');
+    }
+  };
+
+  const delete_cookie = function(name) {
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  };
 
   return (
     <header style={style.header}>

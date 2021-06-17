@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import './Login.css';
 
-const Login = ({ setUser }) => {
+const Login = ({ user, setUser }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -15,10 +15,24 @@ const Login = ({ setUser }) => {
 
     axios.post('/api/login', { email, password })
       .then(response => {
-        setUser({ loggedIn: true, email: email });
+        console.log(response);
+        console.log('state before setting user at login', user);
+        console.log('checking if set user is defined', setUser);
+        setUser({ ...user, loggedIn: true, email: email, posts: response.data.posts });
+        console.log('logging users from login.js', user);
       })
       .catch(err => console.log(err));
+
+    // loadUserPosts();
   };
+
+  // const loadUserPosts = () => {
+  //   axios.get(`/api/user-posts/${email}`)
+  //     .then(response => {
+  //       setUser({ post: response.data });
+  //     })
+  //     .catch(err => console.log.log(err));
+  // };
 
 
   // Handle SIGNIN for Google OAuth
@@ -59,11 +73,11 @@ const Login = ({ setUser }) => {
         <form onSubmit={formSignIn} id="login-form">
           <div>
             <label htmlFor="email">Email</label>
-            <input name="email" placeholder='Email' id="email" type="email" autoComplete="off" required onChange={(e) => setEmail(e.target.value)}/>
+            <input name="email" placeholder='Email' id="email" type="email" autoComplete="off" required onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div>
             <label htmlFor="password">Password</label>
-            <input name="password" placeholder='Password' id="password" type="password" required onChange={(e) => setPassword(e.target.value)}/>
+            <input name="password" placeholder='Password' id="password" type="password" required onChange={(e) => setPassword(e.target.value)} />
           </div>
           <div>
             <button id="login__btn" type="submit"> Login </button>
@@ -77,7 +91,7 @@ const Login = ({ setUser }) => {
           style={style.loginButton}
           onClick={handleSignInClick}
         >
-           Or sign in with Google
+          Or sign in with Google
         </Button>
       </section>
     </main>

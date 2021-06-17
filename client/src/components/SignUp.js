@@ -16,7 +16,7 @@ import './SignUp.css';
 //   email: state.user.email
 // });
 
-const SignupScreen = (props) => {
+const SignupScreen = ({ user, setUser }) => {
   const history = useHistory();
 
   const [name, setName] = useState('');
@@ -38,13 +38,11 @@ const SignupScreen = (props) => {
   // {email: sdfjalk}
   const signupSubmitHandler = (e) => {
     e.preventDefault();
-    axios.post('/api/signup', {email, name, password})
+    axios.post('/api/signup', { email, name, password })
       .then((response) => {
         console.log(response);
         // setUser
-        console.log(props.user);
-        console.log(props.setUser);
-        props.setUser( { loggedIn: true, email: email });
+        setUser({ ...user, loggedIn: true, email: email });
       })
       .catch(err => console.log(err));
   };
@@ -64,19 +62,19 @@ const SignupScreen = (props) => {
         <form onSubmit={signupSubmitHandler}>
           <div className="signup__input-group">
             <label htmlFor="userName">Full Name</label>
-            <input name="userName" placeholder='Full Name' id="userName" type="text" required onChange={(e) => setName(e.target.value)}/>
+            <input name="userName" placeholder='Full Name' id="userName" type="text" required onChange={(e) => setName(e.target.value)} />
           </div>
           <div className="signup__input-group">
             <label htmlFor="email">Email</label>
-            <input name="email" placeholder='Email' id="email" type="email" required onChange={(e) => setEmail(e.target.value)}/>
+            <input name="email" placeholder='Email' id="email" type="email" required onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div className="signup__input-group">
             <label htmlFor="password">Password</label>
-            <input name="password" placeholder='Password' id="password" type="password" required onChange={(e) => setPassword(e.target.value)}/>
+            <input name="password" placeholder='Password' id="password" type="password" required onChange={(e) => setPassword(e.target.value)} />
           </div>
           <div className="form__btn-group">
             <button type="submit">Submit</button>
-            <Link to='/' id="form__cancel-btn">Cancel</Link> 
+            <Link to='/' id="form__cancel-btn">Cancel</Link>
           </div>
           <div className="signup__message">
             {/* {loading && <h4>Loading...</h4>}

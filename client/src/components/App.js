@@ -1,5 +1,5 @@
 import { hot } from 'react-hot-loader/root';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from './Header';
@@ -8,6 +8,9 @@ import SignUp from './SignUp';
 import Tabs from './Tabs';
 // import CreatePost from './CreatePost';
 
+import axios from 'axios';
+import { SettingsInputAntennaTwoTone } from '@material-ui/icons';
+
 const App = () => {
   // TODO: add necessary user fields
   // TODO: refactor to context API
@@ -15,23 +18,33 @@ const App = () => {
     loggedIn: false,
     email: null,
     name: null,
-    posts: null,
+    posts: [],
   });
-  console.log(user);
+
+  console.log('state in app', user);
+
+  useEffect(() => {
+    axios.get('/api/verifyWithCookie')
+      .then(response => {
+        const { data: { email } } = response;
+        setUser({ ...user, loggedIn: true, email: email, posts: response.data.posts });
+      })
+      .catch(error => console.log(error));
+  }, []);
 
   return (
     <Router>
       <CssBaseline />
-      <Header loggedIn={user.loggedIn} />
+      <Header loggedIn={user.loggedIn} setUser={setUser} />
       <Switch>
         {/* <Route path='/create-post'>
           <CreatePost user={user} setUser={setUser} />
         </Route> */}
         <Route path='/signup'>
-          {user.loggedIn ? <Tabs user={user} setUser={setUser} /> : <SignUp setUser={setUser}/>}
+          {user.loggedIn ? <Tabs user={user} setUser={setUser} /> : <SignUp user={user} setUser={setUser} />}
         </Route>
         <Route exact path='/'>
-          {user.loggedIn ? <Tabs user={user} setUser={setUser} /> : <Login setUser={setUser} />}
+          {user.loggedIn ? <Tabs user={user} setUser={setUser} /> : <Login user={user} setUser={setUser} />}
         </Route>
       </Switch>
     </Router>

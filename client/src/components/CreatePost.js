@@ -6,15 +6,24 @@ import axios from 'axios';
 const CreatePost = ({ user, setUser }) => {
   const email = user.email;
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState('');
+
+  const postContent = document.querySelector('#post-content');
+  const categoryInput = document.querySelector('#category-input');
+
   // TODO: handle posting logic here
   const handlePostClick = (e) => {
     e.preventDefault();
     axios.post('/api/post', { email, category, content })
-    .then(response => {
-      console.log(response);
-    })
-    .catch(err => console.log(err));
+      .then(response => {
+        const { data: posts } = response;
+        setUser({ ...user, posts: posts });
+        console.log('Loggin state from create user', user);
+      })
+      .catch(err => console.log(err));
+    postContent.value = '';
+    categoryInput.value = '';
+    return;
   };
 
   const handleTextAreaChange = (e) => {
@@ -25,6 +34,7 @@ const CreatePost = ({ user, setUser }) => {
     <form style={style.content} onSubmit={handlePostClick}>
       <h1 style={style.h1}>what did you make?</h1>
       <textarea
+        id="post-content"
         value={content}
         onChange={handleTextAreaChange}
         style={style.textarea}
@@ -32,7 +42,7 @@ const CreatePost = ({ user, setUser }) => {
       />
       <div id="createPost__category-input">
         <label htmlFor="category-input">What type of food is this?</label>
-        <input id="category-input" type="text" placeholder="Pasta" required onChange={(e) => setCategory(e.target.value)}/>
+        <input id="category-input" type="text" placeholder="Pasta" required onChange={(e) => setCategory(e.target.value)} />
       </div>
       <button type="submit" style={style.share}>
         Share with my foodie friends

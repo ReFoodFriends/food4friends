@@ -9,7 +9,9 @@ const FindFriend = () => {
   };
 
   // TODO: backend logic to add friend
-  const handleAddFriend = () => {};
+  const handleAddFriend = () => {
+  
+  };
 
   return (
     <article style={style.content}>
