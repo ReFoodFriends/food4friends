@@ -95,7 +95,6 @@ const style = {
   content: {
     width: '80vw',
     minHeight: '70vh',
-    border: 'solid hsla(31, 100%, 56%, 1)',
   },
   h1: {
     fontWeight: '300',

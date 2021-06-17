@@ -20,13 +20,14 @@ const App = () => {
     name: null,
     posts: [],
   });
+
   console.log('state in app', user);
-  // console.log(user);
+
   useEffect(() => {
     axios.get('/api/verifyWithCookie')
       .then(response => {
         const { data: { email } } = response;
-        setUser({ loggedIn: true, email: email, posts: response.data.posts });
+        setUser({ ...user, loggedIn: true, email: email, posts: response.data.posts });
       })
       .catch(error => console.log(error));
   }, []);
@@ -40,7 +41,7 @@ const App = () => {
           <CreatePost user={user} setUser={setUser} />
         </Route> */}
         <Route path='/signup'>
-          {user.loggedIn ? <Tabs user={user} setUser={setUser} /> : <SignUp setUser={setUser} />}
+          {user.loggedIn ? <Tabs user={user} setUser={setUser} /> : <SignUp user={user} setUser={setUser} />}
         </Route>
         <Route exact path='/'>
           {user.loggedIn ? <Tabs user={user} setUser={setUser} /> : <Login user={user} setUser={setUser} />}

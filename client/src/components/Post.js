@@ -1,10 +1,11 @@
 import React from 'react';
 
-const Post = () => {
+const Post = ({ content, category, date }) => {
   return (
     <article style={style.post}>
-      <h3>Abhi&apos;s bacon breakfast</h3>
-      <p>I made the most amazing meal oh my gosh</p>
+      <h3>{category}</h3>
+      <p>{content}</p>
+      <h5>{date}</h5>
     </article>
   );
 };
@@ -22,11 +23,6 @@ const style = {
     marginTop: '0',
     textAlign: 'center',
     opacity: '0.75',
-  },
-  postContainer: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-    gridGap: '12px',
   },
   post: {
     backgroundColor: 'hsla(31, 2%, 92%, 1)',

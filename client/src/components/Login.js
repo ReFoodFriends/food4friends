@@ -18,11 +18,11 @@ const Login = ({ user, setUser }) => {
         console.log(response);
         console.log('state before setting user at login', user);
         console.log('checking if set user is defined', setUser);
-        setUser({ loggedIn: true, email: email, posts: response.data.posts});
+        setUser({ ...user, loggedIn: true, email: email, posts: response.data.posts });
         console.log('logging users from login.js', user);
       })
       .catch(err => console.log(err));
-    
+
     // loadUserPosts();
   };
 
@@ -73,11 +73,11 @@ const Login = ({ user, setUser }) => {
         <form onSubmit={formSignIn} id="login-form">
           <div>
             <label htmlFor="email">Email</label>
-            <input name="email" placeholder='Email' id="email" type="email" autoComplete="off" required onChange={(e) => setEmail(e.target.value)}/>
+            <input name="email" placeholder='Email' id="email" type="email" autoComplete="off" required onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div>
             <label htmlFor="password">Password</label>
-            <input name="password" placeholder='Password' id="password" type="password" required onChange={(e) => setPassword(e.target.value)}/>
+            <input name="password" placeholder='Password' id="password" type="password" required onChange={(e) => setPassword(e.target.value)} />
           </div>
           <div>
             <button id="login__btn" type="submit"> Login </button>
@@ -91,7 +91,7 @@ const Login = ({ user, setUser }) => {
           style={style.loginButton}
           onClick={handleSignInClick}
         >
-           Or sign in with Google
+          Or sign in with Google
         </Button>
       </section>
     </main>
