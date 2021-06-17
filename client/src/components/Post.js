@@ -1,11 +1,18 @@
 import React from 'react';
 
-const Post = ({ content, category, date }) => {
+import '../../public/stylesheets/Post.css';
+
+
+const Post = ({ title, content, category, date }) => {
   return (
-    <article style={style.post}>
-      <h3>{category}</h3>
+    <article className="post">
+      <h3>{title}</h3>
       <p>{content}</p>
-      <h5>{date}</h5>
+      <div className="post__meta">
+        <h5>{date}</h5>
+        <i className="fas fa-circle"></i>
+        <h5>{category}</h5>
+      </div>
     </article>
   );
 };

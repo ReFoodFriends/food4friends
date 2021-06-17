@@ -4,7 +4,8 @@ import axios from 'axios';
 // import { useSelector, useDispatch, connect } from 'react-redux';
 
 // // Import CSS
-import './SignUp.css';
+import '../../public/stylesheets/SignUp.css';
+
 // import '../stylesheets/screenStyles/SignupScreen.css';
 
 // // Import Register Action from userActions

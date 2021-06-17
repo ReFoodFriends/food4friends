@@ -1,0 +1,124 @@
+.login__screen {
+  height: 100%;
+  padding: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login__form-container {
+  width: 400px;
+  height: 500px;
+  padding: 50px 60px 70px 60px;
+  background: linear-gradient(to right bottom, #4c5aca, #7751c2, #9747b6, #b03ca7, #c33096, #d22c87, #dd2d78, #e43468, #ea4459, #ed554b, #ed663d, #e97731);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.login__form-container h1 {
+  text-align: center;
+  color: #fff;
+  font-family: 'Lobster Two';
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+#login-form {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+#login-form > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+#login-form > div > label {
+  color: #fff;
+} 
+
+#login-form > div > input {
+  padding: .7rem;
+  border: none;
+  border-radius: 3px;
+  margin-top: 3px;
+  margin-bottom: 7px;
+}
+
+#login-form > div > input:focus,
+#login-form > div > input:active {
+  outline:none;
+}
+
+#login__btn {
+  padding: 10px 0;
+  background-color: #634cca;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-weight: 500;
+  margin-top: 20px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: .3s all ease;
+  font-size: 1rem;
+}
+
+#login__btn:hover {
+ background-color: #4f3ca7;
+ color: #fff;
+}
+
+#login-form__signup-btn {
+  text-decoration: none;
+  color: #3241af;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: .3s all ease;
+}
+
+#signup-redirect {
+  margin-top: 20px;
+}
+
+#login-form__signup-btn:hover {
+  color: #4f3ca7;;
+}
+
+.login__google {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #3646be;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-weight: 500;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: .3s all ease;
+  font-size: 1rem;
+  
+}
+
+.login__google > img{
+  height: 25px;
+  margin-right: 8px;
+}
+
+.login__google:hover {
+  background-color: #374292;
+}

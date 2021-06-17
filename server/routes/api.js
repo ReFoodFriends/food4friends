@@ -17,6 +17,22 @@ router.get('/verifyWithCookie', userController.checkCookie, userController.getUs
   return res.status(200).json({ email: res.locals.email, posts: res.locals.userPosts });
 });
 
+router.get('/findPeople/:name/:email', userController.findPeople, (req, res) => {
+  return res.status(200).json({alreadyFollow: res.locals.alreadyFollow, notFollow: res.locals.notFollow});
+});
+
+router.get('/getFollowPost/:email', userController.getFollowPosts, (req, res) => {
+  return res.status(200).json(res.locals.followPosts);
+});
+
+router.post('/followUser', userController.followUser, (req, res) => {
+  return res.status(200).send('successful');
+});
+
+router.put('/unfollowUser', userController.unfollowUser, (req, res) => {
+  return res.status(200).send('sucessful');
+});
+
 router.get('/login', userController.loginOrCreateUser, (req, res) =>
   res.status(200).json(res.locals.user)
 );
@@ -29,9 +45,9 @@ router.get('/user-posts/:email', userController.getUserPosts, (req, res) =>
   res.status(200).json(res.locals.userPosts)
 );
 
-router.get('/getFeed', userController.getFeed, (req, res) =>
-  res.status(200).json(res.locals.followedPosts)
-);
+// router.get('/getFeed', userController.getFeed, (req, res) =>
+//   res.status(200).json(res.locals.followedPosts)
+// );
 
 // router.post('/searchUsers', userController.searchUsers, (req, res) =>
 //   res.status(200).json(res.locals.users)
