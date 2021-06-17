@@ -43,7 +43,7 @@ const SignupScreen = ({ user, setUser }) => {
       .then((response) => {
         console.log(response);
         // setUser
-        setUser({ ...user, loggedIn: true, email: email });
+        setUser({ ...user, loggedIn: true, name: response.data.name, email: email });
       })
       .catch(err => console.log(err));
   };

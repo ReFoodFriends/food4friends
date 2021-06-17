@@ -6,31 +6,35 @@ const userController = require('../controllers/userController');
 // 	return res.status(200).json();
 // });
 router.post('/signup', userController.addUser, (req, res) =>
-  res.status(200).json({ email: res.locals.email })
+  res.status(200).json({ email: res.locals.email, name: res.locals.name })
 );
 
 router.post('/login', userController.verifyUser, userController.getUserPosts, (req, res) =>
-  res.status(200).json({ email: res.locals.email, posts: res.locals.userPosts })
+  res.status(200).json({ email: res.locals.email, posts: res.locals.userPosts, name: res.locals.name })
 );
 
 router.get('/verifyWithCookie', userController.checkCookie, userController.getUserPosts, (req, res) => {
-  return res.status(200).json({ email: res.locals.email, posts: res.locals.userPosts });
+  return res.status(200).json({ email: res.locals.email, posts: res.locals.userPosts, name: res.locals.name });
 });
 
 router.get('/findPeople/:name/:email', userController.findPeople, (req, res) => {
-  return res.status(200).json({alreadyFollow: res.locals.alreadyFollow, notFollow: res.locals.notFollow});
+  return res.status(200).json({alreadyFollow: res.locals.alreadyFollow});
 });
 
-router.get('/getFollowPost/:email', userController.getFollowPosts, (req, res) => {
+router.get('/getFollowPosts/:email', userController.getFollowPosts, (req, res) => {
   return res.status(200).json(res.locals.followPosts);
 });
 
+router.get('/checkFollow/:followee/:follower', userController.checkFollow, (req, res) =>{
+  return res.status(200).json({ result: res.locals.result});
+})
+
 router.post('/followUser', userController.followUser, (req, res) => {
-  return res.status(200).send('successful');
+  return res.status(200).send('successful following');
 });
 
 router.put('/unfollowUser', userController.unfollowUser, (req, res) => {
-  return res.status(200).send('sucessful');
+  return res.status(200).send('sucessful unfollowing');
 });
 
 router.get('/login', userController.loginOrCreateUser, (req, res) =>

@@ -19,7 +19,7 @@ const Login = ({ user, setUser }) => {
         console.log('response from login page', response);
         // console.log('state before setting user at login', user);
         // console.log('checking if set user is defined', setUser);
-        setUser({ ...user, loggedIn: true, email: email, posts: response.data.posts });
+        setUser({ ...user, loggedIn: true, email: email, name: response.data.name, posts: response.data.posts });
         console.log('logging users from login.js', user);
       })
       .catch(err => console.log(err));
