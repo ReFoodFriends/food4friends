@@ -13,6 +13,7 @@ const CreatePost = ({ user, setUser }) => {
 
   const postContent = document.querySelector('#post-content');
   const categoryInput = document.querySelector('#category-input');
+  const titleInput = document.querySelector('#title-input');
 
   // TODO: handle posting logic here
   const handlePostClick = (e) => {
@@ -26,6 +27,7 @@ const CreatePost = ({ user, setUser }) => {
       .catch(err => console.log(err));
     postContent.value = '';
     categoryInput.value = '';
+    titleInput.value = '';
     return;
   };
 

@@ -9,8 +9,8 @@ jest.mock('axios');
 //const getFirstAlbumTitle = require("./index");
 
 it("returns the email and password if newUser", async () => {
-  const newUser = axios.get.mockResolvedValue({email: "umair@gmail.com", password: 1234})
-  const result = await signupSubmitHandler(newUser); // Run the function
+  axios.get.mockResolvedValue({email: "umair@gmail.com", password: 1234})
+  const result = await signupSubmitHandler; // Run the function
   expect(result).toEqual({email, password}); // Make an assertion on the result
 });
 

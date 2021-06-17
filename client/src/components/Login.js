@@ -16,9 +16,9 @@ const Login = ({ user, setUser }) => {
 
     axios.post('/api/login', { email, password })
       .then(response => {
-        console.log(response);
-        console.log('state before setting user at login', user);
-        console.log('checking if set user is defined', setUser);
+        console.log('response from login page', response);
+        // console.log('state before setting user at login', user);
+        // console.log('checking if set user is defined', setUser);
         setUser({ ...user, loggedIn: true, email: email, posts: response.data.posts });
         console.log('logging users from login.js', user);
       })

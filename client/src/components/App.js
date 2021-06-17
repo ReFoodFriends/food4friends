@@ -21,6 +21,7 @@ const App = () => {
     email: null,
     name: null,
     posts: [],
+    friends: []
   });
 
   console.log('state in app', user);

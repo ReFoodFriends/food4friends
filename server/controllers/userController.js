@@ -42,7 +42,7 @@ userController.addUser = async (req, res, next) => {
 userController.verifyUser = async (req, res, next) => {
 	const { email, password } = req.body;
 
-	const searchQuery = 'SELECT password, cookie FROM localuser where email = $1';
+	const searchQuery = 'SELECT password, cookie, name FROM localuser where email = $1';
 	const searchParams = [email];
 	let hashedPass;
 	try {
@@ -54,6 +54,8 @@ userController.verifyUser = async (req, res, next) => {
 		const passwordMatched = bcrypt.compare(password, hashedPass);
 		if (passwordMatched) {
 			res.locals.email = email;
+			res.locals.name = name;
+			// res.locals.name = 
 			res.cookie('SSID', rows[0].cookie);
 		} else {
 			return next({ err: 'invalid password' });
@@ -238,14 +240,25 @@ userController.followUser = async (req, res, next) => {
 	const insertParams = [followee, follower];
 	try {
 		await db.query(insertQuery, insertParams);
-		console.log('successfully');
+		console.log('successfully insert');
 		return next();
 	} catch(e) {
-		return next({message: {err: 'error at following user: '+ e}})
+		return next({message: {err: 'error at following user: '+ e}});
 	}
 };
 
-
+userController.unfollowUser = async (req, res, next) => {
+	const { followee, follower} = req.body;
+	const deleteQuery = 'DELETE FROM directed_followers WHERE followee_id = (SELECT id FROM localuser WHERE email = $1) AND follower_id = (SELECT id FROM localuser WHERE email = $2)';
+	const deleteParams = [followee, follower];
+	try {
+		await db.query(deleteQuery, deleteParams);
+		console.log('successful delete');
+		return next();
+	} catch(e) {
+		return next({message: {err: 'error at following user: '+ e}});
+	}
+}
 
 // userController.searchUsers = async (req, res, next) => {
 // 	const {name} = req.body;
