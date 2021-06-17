@@ -21,7 +21,6 @@ const App = () => {
     email: null,
     name: null,
     posts: [],
-    friends: []
   });
 
   console.log('state in app', user);
@@ -30,7 +29,7 @@ const App = () => {
     axios.get('/api/verifyWithCookie')
       .then(response => {
         const { data: { email } } = response;
-        setUser({ ...user, loggedIn: true, email: email, posts: response.data.posts });
+        setUser({ ...user, loggedIn: true, email: email, name: response.data.name, posts: response.data.posts });
       })
       .catch(error => console.log(error));
   }, []);

@@ -23,11 +23,11 @@
 }
 
 .findFriend__form > input {
+  flex: 3;
   border: none;
   font-size: 1.1rem;
-  width: 75%;
-  border-radius: 3px;
-  padding: 0 5px
+  border-radius: 3px 0 0 3px;
+  padding: 10px 5px
 }
 
 .findFriend__form > input:focus,
@@ -35,10 +35,12 @@
   outline: none;
 }
 
-.findFriend__form > button {
+#findFriends__cancel-btn {
+  transition: .3s all ease;
+  flex: 1;
   width: 23%;
   margin: 0;
-  padding: 10px 12px;
+  padding: 11px 12px;
   border: none;
   background-color: #634cca;
   color: #fff;
@@ -47,11 +49,15 @@
   text-align: center;
   cursor: pointer;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: 0 3px 3px 0;
   transition: .3s all ease;
 }
 
 .findFriend__form > button:hover {
  background-color: #4f3ca7;
 }
+
+/* .btn-visible {
+  display: block !important;
+} */
 

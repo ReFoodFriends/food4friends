@@ -55,9 +55,9 @@ const Tabs = ({ user, setUser }) => {
       <div id="content__gradient-bg">
         <section className="tabs__content">
         {currentTab === 0 && <CreatePost user={user} setUser={setUser} />}
-        {currentTab === 1 && <Feed />}
+        {currentTab === 1 && <Feed user={user} setUser={setUser} />}
         {currentTab === 2 && <MyPosts user={user} />}
-        {currentTab === 3 && <FindFriend />}
+        {currentTab === 3 && <FindFriend user={user} setUser={setUser} />}
         </section>
       </div>
     </main>

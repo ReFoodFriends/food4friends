@@ -35,6 +35,7 @@ userController.addUser = async (req, res, next) => {
 	}
 	console.log('successfully signuped');
 	res.locals.email = email;
+	res.locals.name = name;
 	res.cookie('SSID', cookie);
 	return next();
 };
@@ -54,7 +55,7 @@ userController.verifyUser = async (req, res, next) => {
 		const passwordMatched = bcrypt.compare(password, hashedPass);
 		if (passwordMatched) {
 			res.locals.email = email;
-			res.locals.name = name;
+			res.locals.name = rows[0].name;
 			// res.locals.name = 
 			res.cookie('SSID', rows[0].cookie);
 		} else {
@@ -94,12 +95,13 @@ userController.checkCookie = async (req, res, next) => {
 	// console.log('arrive here');
 	// console.log(req.cookies);
 	const cookie = req.cookies.SSID;
-	const searchQuery = 'SELECT email FROM localuser WHERE cookie = $1';
+	const searchQuery = 'SELECT email, name FROM localuser WHERE cookie = $1';
 	const searchParams = [cookie];
 	try {
 		const { rows } = await db.query(searchQuery, searchParams);
 		console.log(rows);
 		res.locals.email = rows[0].email;
+		res.locals.name = rows[0].name;
 		return next();
 	} catch (e) {
 		return next({ err: 'error at db search for check cookie' + e });
@@ -203,25 +205,40 @@ userController.getUserPosts = async (req, res, next) => {
 
 userController.findPeople = async (req, res, next) => {
 	// url -> host/api/findPeople/:name
-	const searchQuery1 = 'SELECT name, email FROM localuser WHERE name LIKE $1 AND id IN (SELECT follower_id FROM directed_followers WHERE followee_id = (SELECT id FROM localuser WHERE email = $2) )';
-	const searchQuery2 = 'SELECT name, email FROM localuser WHERE name LIKE $1 AND id IN (SELECT follower_id FROM directed_followers WHERE followee_id = (SELECT id FROM localuser WHERE email = $2) )';
-	const searchParams = [req.params.name + '%', req.params.email];
+	// const searchQuery1 = 'SELECT name, email FROM localuser WHERE name ILIKE $1 AND id IN (SELECT follower_id FROM directed_followers WHERE followee_id = (SELECT id FROM localuser WHERE email = $2) )';
+	const searchQuery1 = 'SELECT name, email FROM localuser WHERE name ILIKE $1';
+	// const searchQuery2 = 'SELECT name, email FROM localuser WHERE name ILIKE $1 AND id IN (SELECT follower_id FROM directed_followers WHERE followee_id = (SELECT id FROM localuser WHERE email = $2) )';
+	// const searchParams = [req.params.name + '%', req.params.email];
+	const searchParams = [req.params.name + '%'];
 	try{
 		const { rows: alreadyFollow } = await db.query(searchQuery1, searchParams);
 		console.log('already following',alreadyFollow);
 		res.locals.alreadyFollow = alreadyFollow;
-		const { rows: notFollow } = await db.query(searchQuery2, searchParams);
-		console.log('not following',notFollow);
-		res.locals.notFollow = notFollow;
+		// const { rows: notFollow } = await db.query(searchQuery2, searchParams);
+		// console.log('not following',notFollow);
+		// res.locals.notFollow = notFollow;
 		return next();
 	} catch(e) {
 		return next({message: {err: 'error at finding people: ' + e}});
 	}
-
 };
 
+userController.checkFollow = async (req, res, next) => {
+	// url -> host/api/checkFollow/:followee/:follower
+	const searchQuery = 'SELECT id FROM directed_followers WHERE followee_id = (SELECT id FROM localuser WHERE email = $1) AND follower_id = (SELECT id FROM localuser WHERE email = $2)';
+	const searchParams = [req.params.followee, req.params.follower];
+	try {
+		const { rowCount } = await db.query(searchQuery, searchParams);
+		if (rowCount) res.locals.result = true;
+		else res.locals.result = false;
+		return next();
+	} catch(e) {
+		return next({message: {err: 'error at checking following: ' + e}});
+	}
+}
+
 userController.getFollowPosts = async (req, res, next) => {
-	const searchQuery = 'SELECT category, content, date, name FROM posts WHERE creator_id IN (SELECT followee_id FROM directed_followers WHERE follower_id = (SELECT id FROM localuser WHERE email = $1)) LEFT JOIN localuser ON followee_id = localuser.id';
+	const searchQuery = 'SELECT p.title, p.category, p.content, p.date, u.name, u.email FROM posts AS p, directed_followers AS d LEFT JOIN localuser AS u ON d.followee_id = u.id WHERE p.creator_id IN (SELECT d.followee_id FROM directed_followers AS d WHERE d.follower_id = (SELECT u.id FROM localuser AS u WHERE u.email = $1))';
 	const searchParams = [req.params.email];
 	try {
 		const { rows } = await db.query(searchQuery, searchParams);
@@ -248,6 +265,7 @@ userController.followUser = async (req, res, next) => {
 };
 
 userController.unfollowUser = async (req, res, next) => {
+		// expecting { followee: ,follower: } in req body
 	const { followee, follower} = req.body;
 	const deleteQuery = 'DELETE FROM directed_followers WHERE followee_id = (SELECT id FROM localuser WHERE email = $1) AND follower_id = (SELECT id FROM localuser WHERE email = $2)';
 	const deleteParams = [followee, follower];
